@@ -8,6 +8,7 @@ import (
 
 	"github.com/usa4ev/parser_sample/internal/grpcsrv/protoparser"
 	"github.com/usa4ev/parser_sample/internal/handlers"
+	"github.com/usa4ev/parser_sample/internal/validation"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -15,8 +16,8 @@ import (
 type server struct {
 	protoparser.ParserServer
 
-	gs  *grpc.Server
-	endpoint string
+	gs       *grpc.Server
+	endpoint string // url where the server starts
 }
 
 func New(endpoint string) *server {
@@ -43,8 +44,13 @@ func (srv *server) ListenAndServe() error {
 	return nil
 }
 
+// GetCompany returns company data if can successfully scrap it from rusprofile
 func (srv *server) GetCompany(ctx context.Context, in *protoparser.GetCompanyRequest) (*protoparser.GetCompanyResponse, error) {
 	res := protoparser.GetCompanyResponse{}
+
+	if err := validation.ValidateINN(in.Inn); err != nil {
+		return nil, fmt.Errorf("invalid inn &v: %v", in.Inn, err)
+	}
 
 	url := fmt.Sprintf("https://www.rusprofile.ru/search?query=%s", in.Inn)
 
@@ -56,7 +62,6 @@ func (srv *server) GetCompany(ctx context.Context, in *protoparser.GetCompanyReq
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0")
 	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
 	req.Header.Set("Accept-Language", "ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3")
-	//req.Header.Set("Accept-Encoding", "gzip, deflate, br")
 	req.Header.Set("Connection", "keep-alive")
 
 	webres, err := http.DefaultClient.Do(req)
