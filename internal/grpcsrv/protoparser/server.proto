@@ -1,0 +1,20 @@
+syntax = "proto3";
+package gRPCServer;
+
+option go_package = "grpcserver/protoparser";
+
+message GetCompanyRequest{
+  string inn = 1;
+}
+
+message GetCompanyResponse{
+  string name = 1;
+  string ceo = 2;
+  string inn = 3;
+  string kpp = 4;
+  string error = 5;
+}
+
+service Parser{
+  rpc GetCompany(GetCompanyRequest) returns(GetCompanyResponse);
+}

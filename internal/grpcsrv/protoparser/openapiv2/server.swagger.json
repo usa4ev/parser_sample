@@ -1,0 +1,69 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "internal/grpcsrv/protoparser/server.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Parser"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "gRPCServerGetCompanyResponse": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ceo": {
+          "type": "string"
+        },
+        "inn": {
+          "type": "string"
+        },
+        "kpp": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
