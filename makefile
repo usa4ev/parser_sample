@@ -1,8 +1,8 @@
 SRV_SRC=./cmd/main.go
 SRV_BINARY_NAME=ParserServer
 BIN_PATH=./bin
-GRPC_SRV_ENDPOINT=localhost:9090
-HTTP_SRV_ENDPOINT=localhost:8080
+GRPC_SRV_ENDPOINT=0.0.0.0:9090
+HTTP_SRV_ENDPOINT=0.0.0.0:8080
 
 
  # Build server
